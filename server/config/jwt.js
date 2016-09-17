@@ -18,7 +18,7 @@ exports.jwtAuth = function(req, res, next) {
       }
       // get user data and attach
       User.findOne({ where: { 'id': decoded.iss } }).then(function(user) {
-        if (user) {       
+        if (user) {
           req.user = user;
           return next();
         }

@@ -2,16 +2,30 @@ $smoke: #3c3c3c;
 
 .start {
 	position: absolute;
-	top: 50%;
-	right: 2%;
+	top: 25%;
+	right: 3%;
+	height: 60%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-around;
+}
+
+.start-btn {
+	width: 220px;
+	text-align: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	background-color: $smoke;
 	opacity: 0.6 !important;
 	border: 0 !important;
 	color: white !important;
+	height: 40px;
 	z-index: 9999999;
 }
 
-.start:after {
+.start-btn:after {
 	content: "";
 	position: absolute;
 	top: 0px;

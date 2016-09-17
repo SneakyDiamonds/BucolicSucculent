@@ -1,25 +1,16 @@
 <div>
-  <div class="temporary center announcement"><span>Click on the map to select destinations</span></div>
+  <div class="center temporary announcement"><span>
+    Click on the map to select destinations
+  </span></div>
 
-  <!-- Map to choose waypoints -->
+  <div class="start">
+    <div class="start-btn btn" ng-show="destinations.length && showMap" ng-click="createPublicGame()">Create Public Game</div>
+    <div class="start-btn btn" ng-show="destinations.length && showMap" ng-click="createPrivateGame()">Create Private Game</div>
+  </div>
+
+  <div class="center announcement" ng-if="gamePath"><span>
+    Share this url with your friends: <a id="gamePath" ng-href="{{gamePath}}">{{gamePath}}</a>
+  </span></div>
+
   <div id="map"></div>
-
-  <div ng-show="map.markers.length"><a class="btn" ng-click="submitWaypoints()" ng-show="showMap">Create Private Game</a></div>
-
-  <div ng-show="map.markers.length"><a class="btn" ng-click="submitWaypointsPublic()" ng-show="showMap">Create Public Game</a></div>
-
-  <div ng-show="map.markers.length">
-
-  <div class="start btn" ng-show="map.markers.length && showMap" ng-click="submitWaypoints()">
-    Start The Hunt
-  </div>
-
-  <div class="sharePath">
-    <h3 ng-if="gamePath">
-      Share this url with your friends: 
-      <a id="gamePath" ng-href="{{ gamePath }}">
-        {{ gamePath }}
-      </a>
-    </h3>
-  </div>
 </div>
