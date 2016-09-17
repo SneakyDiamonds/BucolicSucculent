@@ -246,13 +246,13 @@ angular.module('app.game', ['uiGmapgoogle-maps', 'app.services', 'ngGeolocation'
 .controller('gameStatsController', ['$scope', 'data', function($scope, data) {
   $scope.players = data.data;
 }])
-.controller('publicController', ['$scope', 'data', '$location', '$window', function($scope, data, $location, $window) {
+.controller('publicController', ['$scope', 'data', 'popular', '$location', '$window', function($scope, data, popular, $location, $window) {
 
   $scope.list = function() {
-
+    console.log('what is popular????', popular);
   };
 
-  $scope.games = data;
+  $scope.games = popular;
 
   $scope.goToGame = function(path) {
     $location.path('/game/' + path + '/map');

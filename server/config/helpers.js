@@ -110,6 +110,27 @@ exports.getPublicGames = function(req, res, next) {
   });
 };
 
+exports.getPublicGameUserData = function(req, res, next) {
+
+  console.log('i hit getPublicGameUserData on the server side!!! WOOT WOOT!!!!');
+
+  Game.findAll({
+
+    where: {
+      public: 1
+    },
+    include: {
+      model: User,
+      attributes: ['username']
+    }
+  }).then(function(data) {
+    console.log('what is data in my getPublicGameUserData', data);
+    res.status(202).send(data);
+  });
+
+
+};
+
 exports.createGame = function(req, res, next) {
 
   // Example Data Structure

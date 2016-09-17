@@ -45,6 +45,12 @@ angular.module('app', ['ui.router', 'app.auth', 'app.createGame', 'uiGmapgoogle-
             console.log('checking my resolve??????', res);
             return res.data;
           });
+        },
+        popular: function(Requests) {
+          return Requests.getPublicGamesUserData().then(function(res) {
+            //console.log('what is my response for getPublicGamesUserData???', res.data);
+            return res.data;
+          });
         }
       }
     })
