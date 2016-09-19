@@ -75,6 +75,8 @@ exports.createPublicGame = function(req, res, next) {
   var pathUrl = md5(JSON.stringify(req.body)).slice(0, 5);
 
   var locations = req.body.markers;
+  console.log(locations, 'locations, locations locations')
+ 
 
   User.findOne({ where: { username: creator } })
   // Find the creator in the User table
@@ -150,6 +152,10 @@ exports.createGame = function(req, res, next) {
 
   var locations = req.body.markers;
 
+  var latlon =  locations.map(function(obj){
+    return {latitude: obj.location.lat, longitude: obj.location.lng};
+  })
+
   User.findOne({ where: { username: creator } })
   // Find the creator in the User table
   .then(function(currentUser) {
@@ -157,7 +163,7 @@ exports.createGame = function(req, res, next) {
     return Game.create({
       path: pathUrl,
       public: 0,
-      locations: locations
+      locations: latlon
     }, { include: [Location] })
     .then(function(game) {
       // then set the creatorId foreign key for the Game

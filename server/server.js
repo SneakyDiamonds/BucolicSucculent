@@ -62,7 +62,7 @@ app.get('/auth/facebook/callback',
 
 require('./config/router')(app, express);
 
-var port = app.get('env') === 'development' ? 4200 : 80;
+var port = app.get('env') === 'development' ? 3000 : 80;
 
 
 // socket connection

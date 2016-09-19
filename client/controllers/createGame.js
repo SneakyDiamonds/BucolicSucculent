@@ -26,7 +26,7 @@ angular.module('app.createGame', ['uiGmapgoogle-maps', 'app.services', 'app'])
       for (var i = 0; i < places.length; i++) {
         var place = places[i];
         console.log($scope.markers.length, place);
-        var marker = Map.createDestination(place, $scope.markers.length.toString(), $scope.map)
+        var marker = Map.createDestination(place, 'test data $scope.markers.length.toString()', $scope.map)
         marker = $scope._customizeDestination(place, marker, map, $scope);
         marker = $scope._addHoverEffect(marker, map);
         $scope.markers.push(marker);

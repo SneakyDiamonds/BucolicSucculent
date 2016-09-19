@@ -1,11 +1,16 @@
 <div>
-  <h1>Welcome {{user}}!</h1>
-  <h3>Here is a list of games you are currently in:</h3>
-  <a href='/auth/facebook'>Update your userprofile with facebook</a>
+  <div class='dashboardtitle'>
+    <div class='dashboarduser'>
+      <img src={{userAvatar}} alt=''>
+      <h1 ><b>Welcome {{user}}!</b></h1>
+    </div>
+    <h3 >Here is a list of SCVNGR rooms you are currently in:</h3>
+    <a class='facebookbutton' href='/auth/facebook'><b>Update your userprofile with facebook</b></a>
+  </div>
   <table id="dashboardTable" class="table table-hover table-bordered">
     <thead>
       <tr>
-        <th>Game #</th>
+        <th>Room #</th>
         <th>Date started</th>
       </tr>
     </thead>

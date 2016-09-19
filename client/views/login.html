@@ -1,17 +1,18 @@
-<div id="loginContainer">
-  <form id="loginForm" ng-submit='login()'>
-	 <div id="loginHeader">
-    <h3> Login </h3>
+
+<div class="transparent login-container">
+  <form class="login-form" ng-submit='login()'>
+    <div class="login-header">
+      <h3> Login </h3>
     </div>
-      <br>
-      <input type='text' ng-model=user.username placeholder='username' required />
-      <br>
-      <input type='password' ng-model=user.password placeholder='password' required />
-      <br>
-      <br>
-      <div id="loginFooter">
-        <input type='submit' />
-      </div>
-      <a href="/#/signup">Not a user yet? Sign Up</a>
+    <div>
+      <input class="login-input" type='text' ng-model=user.username placeholder='username' required />
+    </div>
+    <div>
+      <input class="login-input" type='password' ng-model=user.password placeholder='password' required />
+    </div>
+    <div class="login-footer">
+      <input class="login-button" type='submit' />
+    </div>
+    <a class="login-link" href="/#/signup">Not a user yet? Sign Up</a>
   </form>
 </div>

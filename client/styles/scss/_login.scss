@@ -1,0 +1,85 @@
+
+$smoke: #3c3c3c;
+$jade: #00B16A;
+
+.login-container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: $smoke;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-form {
+  width: 40%;
+  height: 60%;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-direction: column;
+}
+
+.login-form > * {
+  width: 100%;
+}
+
+.login-header {
+  border-radius: 5px 5px 0 0;
+  text-align: left;
+  color: white;
+}
+
+.login-footer {
+  border-radius: 0 0 5px 5px;
+}
+
+.login-header, .login-footer {
+  padding: 3%;
+  background-color: #363636;
+}
+
+.login-input {
+  background-color: white;
+  color: black;
+  width: 80%;
+  border-radius: 5px;
+  border: 0px solid white;
+  font-size: 16px;
+  padding: 5px;
+}
+
+.login-button {
+  background-color: $jade;
+  color: white;
+  width: 80%;
+  border-radius: 5px;
+  border: 0px solid white;
+  font-size: 16px;
+  padding: 5px;
+}
+
+.login-link {
+  text-decoration: none;
+  color: white;
+  &:link {
+    text-decoration: none;
+    color: white;
+  }
+  &:visited {
+    text-decoration: none;
+    color: white;
+  }
+  &:hover {
+    text-decoration: none;
+    color: white;
+  }
+  &:active {
+    text-decoration: none;
+    color: white;
+  }
+}

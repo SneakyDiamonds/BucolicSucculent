@@ -11,7 +11,7 @@ angular.module('app.dashboard', [])
 
   $scope.user = data.userFacebook.facebookname || data.userdata.username;
   $scope.games = data.userdata.games;
-
+  $scope.userAvatar = data.userFacebook.facebookavatar
   //update facebook stuffs
   $scope.facebook = Requests.updateFacebookData;
 
@@ -19,4 +19,3 @@ angular.module('app.dashboard', [])
     $location.path('/game/' + path + '/map');
   };
 }]);
-
