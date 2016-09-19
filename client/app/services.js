@@ -118,37 +118,8 @@ angular.module('app.services', ['ngGeolocation', 'btford.socket-io'])
     }
   };
 }])
-// new factory to provide socket connects
-// .factory('socket', ['btford.socket-io'], function(socketFactory){
-//   return socketFactory({
-//     prefix: 'foo~',
-//     ioSocket: io.connect('/bar')
-//   });
-// })
 .factory('socket', function (socketFactory) {
     return socketFactory();
-})
-.factory('socket2', function ($rootScope) {
-  return {
-    on: function (eventName, callback) {
-      socket.on(eventName, function () {  
-        var args = arguments;
-        $rootScope.$apply(function () {
-          callback.apply(socket, args);
-        });
-      });
-    },
-    emit: function (eventName, data, callback) {
-      socket.emit(eventName, data, function () {
-        var args = arguments;
-        $rootScope.$apply(function () {
-          if (callback) {
-            callback.apply(socket, args);
-          }
-        });
-      })
-    }
-  };
 })
 .factory('Auth', ['$http', '$location', '$window', function ($http, $location, $window) {
   // Auth service is responsible for authenticating our user
@@ -326,7 +297,7 @@ angular.module('app.services', ['ngGeolocation', 'btford.socket-io'])
   }
 
   var createDestination = function(place, title, map) {
-    var marker = _createMarker(place, title, map);
+    ret = _createMarker(place, title, map);
     return _customizeDestination(place, marker);
     // marker.setMap(map);
     // return marker;
@@ -373,7 +344,7 @@ angular.module('app.services', ['ngGeolocation', 'btford.socket-io'])
 
    var locationMarker = function(position, title, map) {
     var icon = {
-      url: 'https://cdn1.iconfinder.com/data/icons/Map-Markers-Icons-Demo-PNG/128/Map-Marker-Marker-Inside-Azure.png',
+      url: 'http://icons.iconarchive.com/icons/icons-land/vista-map-markers/256/Map-Marker-Ball-Pink-icon.png',
       size: new google.maps.Size(50, 50),
       scaledSize: new google.maps.Size(50, 50),
       origin: new google.maps.Point(0,0)
@@ -391,7 +362,7 @@ angular.module('app.services', ['ngGeolocation', 'btford.socket-io'])
 
   var playerMarker = function(lat, lng, map){
       var icon = {
-        url: 'http://www.inbiznez.com/images/Glass_Sphere2.png',
+        url: 'http://www.fordesigner.com/imguploads/Image/cjbc/zcool/png20080526/1211811462.png',
         size: new google.maps.Size(35, 35),
         scaledSize: new google.maps.Size(35, 35),
         origin: new google.maps.Point(0,0)

@@ -40,8 +40,13 @@ angular.module('app.game', ['uiGmapgoogle-maps', 'app.services', 'ngGeolocation'
     longitude: -122.40904010000001
   }
 
+  socket.on('send:time', function(data){
+    console.log(data);
+  })
+
   //update other player locations
   socket.on('updateLocation', function(data){
+    console.log(data.user + ' moved!');
       console.log('socket updateLocation', data);
       if($scope.playersPlaying[data.user] === undefined){
         $scope.playersPlaying[data.user] = [data, Map.playerMarker(data.latitude, data.longitude, $scope.map)];
@@ -69,7 +74,7 @@ angular.module('app.game', ['uiGmapgoogle-maps', 'app.services', 'ngGeolocation'
 
   //Add labels to markers according to sequence number
   $scope.markers.forEach(function(marker, ind) {
-    var label = marker.sequence.toString();
+    var label = 'test marker.sequence.toString()';
     $scope.markers[ind].options = {
       label: label
     };
@@ -109,6 +114,12 @@ angular.module('app.game', ['uiGmapgoogle-maps', 'app.services', 'ngGeolocation'
     });
   };
 
+  setInterval(function(){
+    $geolocation.getCurrentPosition({timeout:60000}).then(function(res){
+    if(res && res.coords){console.log(res.coords, 'testing geolocator')}
+    });
+  }, 1000)
+
   createMyPosition();
 
   //watch for position change
@@ -120,6 +131,7 @@ angular.module('app.game', ['uiGmapgoogle-maps', 'app.services', 'ngGeolocation'
         latitude: lat,
         longitude: lng
       };
+    console.log('new pos ', pos);
     //update $scope.position so $scope.$watch('position') can re-register new location for map to render!  
     $scope.position = pos; 
     //emit changed position to broadcast from serverside to all users 
@@ -261,4 +273,3 @@ angular.module('app.game', ['uiGmapgoogle-maps', 'app.services', 'ngGeolocation'
   };
 
 }]);
-
