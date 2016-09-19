@@ -56,6 +56,17 @@ angular.module('app.services', ['ngGeolocation', 'btford.socket-io'])
       });
     },
 
+    getPublicGamesUserData: function() {
+      console.log('i hit getPublicGamesUserData');
+
+      return $http({
+        method: 'GET',
+        url: '/api/publicgameuserdata',
+
+      });
+
+    },
+
     updateLocStatus: function(user, loc) {
       var data = {
         username: user,

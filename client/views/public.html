@@ -6,12 +6,14 @@
       <tr>
         <th>Game #</th>
         <th>Date started</th>
+        <th>Number of users in game:</th>
       </tr>
     </thead>
     <tbody>
       <tr ng-repeat="game in games track by $index" ng-click="goToGame(game.path)">
         <td>{{$index + 1}}</td>
         <td>Created on {{game.createdAt | date:'medium'}}</td>
+        <td>{{game.users.length}} users</td>
       </tr>
     </tbody>
   </table>
