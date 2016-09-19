@@ -5,36 +5,8 @@
     <h3 class="error">Your location wasn't found!</h3>
     <p><<< If you are using Chrome, please try another browser >>></p>
   </div>
-    
-
-  <ui-gmap-google-map events='map.events' center='map.center' zoom='map.zoom'>
-    <ui-gmap-markers models="markers" idKey="'id'" coords="'self'" options="'options'"></ui-gmap-markers>
-    <!-- current User marker -->
-    <ui-gmap-marker 
-    center="circle.center" 
-    idKey="254" 
-    options="userMarkOptions.options" coords="circle.center" events='mark.events'
-    clickable=true>
-    </ui-gmap-marker>
-    <!-- current User infowindow -->
-    <ui-gmap-window coords ="circle.center" options="wind.options" show="wind.show">
-     <div>
-       <img src = 'http://pldh.net/media/pokemon/shuffle/007.png'/>
-     </div>
-   </ui-gmap-window>
-    <!-- other user markers -->
-    <ui-gmap-circle 
-    ng-repeat="object in players"
-    radius="100"
-    stroke="{color: '#DF6C0A', weight: 1, opacity: 1.0}"
-    fill="{color: '#DF6C0A', opacity: 0.8}"
-    center="{latitude: object.latitude, longitude: object.longitude}"
-    clickable=true>
-  </ui-gmap-circle>
-    <!--TODO append other player locations here -->
-
-  </ui-gmap-google-map>
-
+  
+  <div id='map'></div>  
   <div class="playerProgress">
 
     <h3>Status for Player: {{user}} </h3>

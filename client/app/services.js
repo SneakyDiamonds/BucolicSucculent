@@ -28,10 +28,10 @@ angular.module('app.services', ['ngGeolocation', 'btford.socket-io'])
         params: params
       });
     },
-    createPrivateGame: function(user, markers) {
+    createGame: function(user, markers) {
       var data = {
         username: user,
-        markers: markers,
+        markers: markers, 
       };
       var token = $window.localStorage.getItem('token');
       $http.defaults.headers.common['x-access-token'] = token;
@@ -277,9 +277,9 @@ angular.module('app.services', ['ngGeolocation', 'btford.socket-io'])
 
   var _createMarker = function(place, title, map) {
     var icon = {
-      url: 'images/marker/marker-lavender-36x36@2x.png',
-      size: new google.maps.Size(36, 36),
-      scaledSize: new google.maps.Size(36, 36),
+      url: 'images/marker/falseMarker/transparent-200x350.png',
+      size: new google.maps.Size(200, 350),
+      scaledSize: new google.maps.Size(200, 350),
       origin: new google.maps.Point(0,0)
     };
     var marker = new google.maps.Marker({
@@ -289,21 +289,55 @@ angular.module('app.services', ['ngGeolocation', 'btford.socket-io'])
       map: map,
       optimized: false
     });
+    return _addHoverEffect(marker);
+  }
+
+  var _addHoverEffect = function(marker) {
+    google.maps.event.addListener(marker, 'mouseover', function() {
+      console.log('mouseover');
+      var title = Number(this.title);
+      $('#markerLayer img').eq(title).css({
+        
+      })
+    })
+    google.maps.event.addListener(marker, 'mouseout', function() {
+      console.log('mouseout');
+      var title = Number(this.title);
+      $('#markerLayer img').eq(title).css({
+
+      })
+    })
+    return marker;
+  }
+
+  var _customizeDestination = function(place, marker) {
+    var title = Number(marker.title);
+    setTimeout(function() {
+      var infowindow = '<div class="iw">\
+        <div class="iw-title">' + place.name + '</div>\
+        <img class="iw-photo" src="' + place.photo + '" />\
+      <div>'
+
+      $('#markerLayer > div').eq(title + 1).append($('<div>', {class: 'lavender ring'}));
+      $('#markerLayer > div').eq(title + 1).append($('<div>', {class: 'shadow'}));
+      $('#markerLayer > div').eq(title + 1).append(infowindow);
+    }, 500);
     return marker;
   }
 
   var createDestination = function(place, title, map) {
-    return _createMarker(place, title, map);
+    var marker = _createMarker(place, title, map);
+    return _customizeDestination(place, marker);
     // marker.setMap(map);
     // return marker;
   }
 
   // Find nearby places using Google API based on location
   // https://developers.google.com/maps/documentation/javascript/places#place_search_requests
-  var findNearbyPlaces = function(map) {
+  var findNearbyPlaces = function(latLng, map) {
     var request = {
-      location: getCenter(map),
-      radius: '5000', // meters
+      location: latLng,
+      radius: '75', // meters
       types: ['establishment']
     };
     service = new google.maps.places.PlacesService(map);
@@ -314,7 +348,7 @@ angular.module('app.services', ['ngGeolocation', 'btford.socket-io'])
           var places = [];
           for (var i = 0; i < results.length; i++) {
             // Show only up to 6 images at one time
-            // if (places.length >= 6) { break; }
+            if (places.length >= 6) { break; }
             (function(i) {
               var place = {
                 name: results[i].name,
@@ -323,7 +357,7 @@ angular.module('app.services', ['ngGeolocation', 'btford.socket-io'])
                   lat: results[i].geometry.location.lat(),
                   lng: results[i].geometry.location.lng()
                 },
-                rating: results[i].rating,
+                rating: results[i].rating
               };
               if (place.photo) {
                 places.push(place);
@@ -337,11 +371,52 @@ angular.module('app.services', ['ngGeolocation', 'btford.socket-io'])
     })
   }
 
+   var locationMarker = function(position, title, map) {
+    var icon = {
+      url: 'https://cdn1.iconfinder.com/data/icons/Map-Markers-Icons-Demo-PNG/128/Map-Marker-Marker-Inside-Azure.png',
+      size: new google.maps.Size(50, 50),
+      scaledSize: new google.maps.Size(50, 50),
+      origin: new google.maps.Point(0,0)
+    };
+    var marker = new google.maps.Marker({
+      position: position,
+      icon: icon,
+      title: title,
+      map: map,
+      optimized: false
+    });
+    // return _addHoverEffect(marker);
+    return marker;
+  }
+
+  var playerMarker = function(lat, lng, map){
+      var icon = {
+        url: 'http://www.inbiznez.com/images/Glass_Sphere2.png',
+        size: new google.maps.Size(35, 35),
+        scaledSize: new google.maps.Size(35, 35),
+        origin: new google.maps.Point(0,0)
+      }
+
+      var marker = new google.maps.Marker({
+        position: {
+          lat: lat || 37.7836881,
+          lng: lng || -122.40904010000001,
+        },
+        map: map,
+        icon: icon,
+        optimized: false
+      });
+
+      return marker;
+  }
+
   return {
     initialize: initialize,
+    locationMarker: locationMarker,
+    playerMarker: playerMarker,
     getCenter: getCenter,
     initializeMarkerLayer: initializeMarkerLayer,
     createDestination: createDestination,
-    findNearbyPlaces: findNearbyPlaces,
+    findNearbyPlaces: findNearbyPlaces
   }
 }]);

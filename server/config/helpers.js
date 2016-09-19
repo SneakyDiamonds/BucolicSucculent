@@ -185,7 +185,7 @@ exports.updateUser = function(req, res) {
       facebookemail: facebookemail,
       facebookname: facebookname
     }, {
-      where: {username: 'mike'} //<===hard coded 
+      where: {username: ''} //<===hard coded 
   })
   .then(function(user){
     console.log(user, 'hopefully updated user');

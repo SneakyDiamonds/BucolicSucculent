@@ -10,33 +10,53 @@ angular.module('app.game', ['uiGmapgoogle-maps', 'app.services', 'ngGeolocation'
 
 
 }])
-.controller('gameMapController', ['$scope', 'data', 'uiGmapGoogleMapApi', '$geolocation', 'Requests', '$window', 'socket','gameFactory', function($scope, data, uiGmapGoogleMapApi, $geolocation, Requests, $window, socket, gameFactory) {
-  //test socket connection
-  socket.on('send:time', function (data) {
-      console.log(data);
-    });
+.controller('gameMapController', ['Map', '$scope', 'data', 'uiGmapGoogleMapApi', '$geolocation', 'Requests', '$window', 'socket','gameFactory', function(Map, $scope, data, uiGmapGoogleMapApi, $geolocation, Requests, $window, socket, gameFactory) {
+  
+  // create game map instance
+  Map.initialize().then(function(map) {
+      $scope.map = map;
+      Map.initializeMarkerLayer($scope.map);
+
+      $scope.userMarker = Map.playerMarker($scope.position.latitude, $scope.position.longitude, $scope.map);
+      // otherusers sockets here?
+      console.log($scope.userMarker, 'maker info');
+      // set overlavy over map to add css styles and markers
+      var myoverlay = new google.maps.OverlayView();
+        myoverlay.draw = function () {
+            this.getPanes().markerLayer.id='userMarkerLayer';
+        };
+        myoverlay.setMap($scope.map);
+      //render markers on screen
+      console.log($scope.markers);
+      $scope.markersOnScreen = $scope.markers.map(function(marker){
+        console.log(marker.latitude, marker.longitude);
+        Map.locationMarker({lat: marker.latitude, lng: marker.longitude}, 'title', $scope.map)
+      })
+
+  });
+  //position of map and user
+  $scope.position= {
+    latitude: 37.7836881,
+    longitude: -122.40904010000001
+  }
+
   //update other player locations
   socket.on('updateLocation', function(data){
       console.log('socket updateLocation', data);
       if($scope.playersPlaying[data.user] === undefined){
-
-        $scope.playersPlaying[data.user] = data;
-        $scope.players.push(data);
+        $scope.playersPlaying[data.user] = [data, Map.playerMarker(data.latitude, data.longitude, $scope.map)];
+        console.log('option 1');
+        // $scope.players.push(data);
       } else {
-
-        var playersCount = $scope.players.length;
-        for(var i = 0; i < playersCount; i++) {
-          if($scope.players[i].user === data.user){
-            $scope.players[i] = data;
-            return;
-          }
-        }
+        console.log('option 2');
+        $scope.playersPlaying[data.user][0] = data;
+        $scope.playersPlaying[data.user][1].setPosition({lat:data.latitude, lng: data.longitude});
       }
     });
   //Get user and markers data
   $scope.user = $window.localStorage.getItem('facebookname') || $window.localStorage.getItem('user');
   $scope.facebookavatar = $window.localStorage.getItem('facebookavatar') || null;
-  $scope.markers = data.data;
+  $scope.markers = data.data; //<=== stationary markers should be easy to get onto map
   $scope.userMarkOptions = {
     options: {
       icon: $scope.facebookavatar
@@ -45,9 +65,7 @@ angular.module('app.game', ['uiGmapgoogle-maps', 'app.services', 'ngGeolocation'
   //Identify new playersPlaying or update playersLocation in players
   $scope.playersPlaying = {};
   $scope.players = []; 
-
-
-  // $scope.players = res.data.players; //<----------------- wishlist
+  $scope.markersOnScreen = []; //<=== will potentially be able to give ability to set destination within each game after game creation
 
   //Add labels to markers according to sequence number
   $scope.markers.forEach(function(marker, ind) {
@@ -57,50 +75,34 @@ angular.module('app.game', ['uiGmapgoogle-maps', 'app.services', 'ngGeolocation'
     };
   });
 
-  $scope.position= {
-    latitude: 37.7836881,
-    longitude: -122.40904010000001
-  }
-  // $watch will rebind new location position to map center when user location changes
-  // in '$geolocation.position.changed' $on listener below
-  $scope.$watch('position', function(newloc){
-    $scope.map.center = newloc;
-  });
+
+  /* $watch will rebind new location position to map center when user location changes
+  in '$geolocation.position.changed' $on listener below
+  setTimeout below (not completely necessary?) allows map to be rendered.. maybe should go within 
+  the Map.initialize callback */
+
+  setTimeout(function(){
+    $scope.$watch('position', function(newloc){
+      $scope.map.setCenter({lat:newloc.latitude, lng:newloc.longitude});
+      $scope.userMarker.setPosition({lat:newloc.latitude, lng:newloc.longitude});
+    });
+  }, 500);
+  
 
   $scope.$watch('players', function(updatedPlayersArray){
     $scope.players = updatedPlayersArray;
   }, true);
 
-  // $scope.$watch('player2', function(newPlayer2){
-  //   console.log(typeof newPlayer2, newPlayer2, 'newPlayer2')
-  //   $scope.player2 = newPlayer2;
+  // //init map
+  // uiGmapGoogleMapApi.then(function(maps) {
+  //   // post rendering tasks....
+  //   // console.log(map);
   // });
-  //necessary to watch players object? --- check later
-  $scope.$watch('playersPlaying', function(updatePlayersPlaying){
-    $scope.playersPlaying = updatePlayersPlaying;
-  }, true)
-
-
-  $scope.map = { 
-    center: $scope.position, 
-    zoom: 13,
-    events: {                               //<--------- add click event to google map
-      click: function(mapModel, eventName, originalEventArgs) {
-     }
-    }
-  };
-  //init map
-  uiGmapGoogleMapApi.then(function(maps) {
-    // post rendering tasks....
-    // console.log(map);
-  });
 
   //create position on map
   var createMyPosition = function() {
-
     $geolocation.watchPosition(function(success){
-
-    }, null, {
+     }, null, {
       timeout: 3000,
       maximumAge: 250,
       enableHighAccuracy: true
